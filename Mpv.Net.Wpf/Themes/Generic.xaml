@@ -26,7 +26,9 @@
                                 x:Name="PART_Seek"
                                 Grid.Row="1"
                                 Grid.ColumnSpan="2"
-                                IsMoveToPointEnabled="True" />
+                                Margin="5"
+                                IsMoveToPointEnabled="True"
+                                ToolTip="{Binding ElementName=PART_Seek, Path=Value, Converter={local:DoubleToTimeConverter}}" />
                             <StackPanel Orientation="Horizontal">
                                 <Button
                                     x:Name="PART_PlayPause"
@@ -61,11 +63,17 @@
                             </StackPanel>
                             <Slider
                                 x:Name="PART_Volume"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="200"
+                                Margin="5,0"
+                                VerticalAlignment="Center"
                                 IsMoveToPointEnabled="True"
                                 IsSnapToTickEnabled="True"
-                                TickFrequency="1"
                                 Maximum="100"
                                 Minimum="0"
+                                ToolTip="{Binding ElementName=PART_Volume, Path=Value}"
+                                TickFrequency="1"
                                 Value="100" />
                         </Grid>
                     </Border>

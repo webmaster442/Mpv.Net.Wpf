@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Windows.Threading;
 
 namespace Mpv.Net.Wpf
 {
-    internal class Locker
+    internal class Locker: DispatcherObject
     {
         public bool IsLocked { get; private set; }
 
@@ -12,7 +13,7 @@ namespace Mpv.Net.Wpf
                 return;
 
             IsLocked = true;
-            action.Invoke();
+            Dispatcher.Invoke(action);
             IsLocked = false;
         }
     }
