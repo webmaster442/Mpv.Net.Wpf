@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Mpv.Net.WpfTestApp
@@ -22,10 +23,12 @@ namespace Mpv.Net.WpfTestApp
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (Player != null)
             {
+                Player.Stop();
+                await Task.Delay(1000);
                 Player.Dispose();
             }
         }

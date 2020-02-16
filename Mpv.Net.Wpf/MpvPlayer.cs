@@ -94,6 +94,16 @@ namespace Mpv.Net.Wpf
             }
         }
 
+        public void Stop()
+        {
+            _player?.Stop();
+        }
+
+        public void PlayPause()
+        {
+            Playpause_Click(null, null);
+        }
+
         private void Seek_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (!_locker.IsLocked && _player != null)
