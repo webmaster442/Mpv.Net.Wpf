@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -91,6 +92,43 @@ namespace Mpv.Net.Wpf
                 });
                 System.Threading.Thread.Sleep(100);
                 _player.Load(fileName);
+                System.Threading.Thread.Sleep(100);
+                GetChapters();
+                GetAudioAndSubtitles();
+            }
+        }
+
+        private void GetAudioAndSubtitles()
+        {
+            List<long> aid = new List<long>();
+            List<long> sid = new List<long>();
+            long tracks = _player.API.GetPropertyLong("track-list/count");
+            for (long track = 0; track < tracks; ++track)
+            {
+                string type = _player.API.GetPropertyString($"track-list/{track}/type");
+                long id = _player.API.GetPropertyLong(($"track-list/{track}/id"));
+                if (type == "audio") aid.Add(id);
+                else if (type == "sub") sid.Add(id);
+            }
+        }
+
+        private void GetChapters()
+        {
+            if (_player == null) return;
+            long chapters = _player.API.GetPropertyLong("chapters"); //set -> chapter
+            ContextMenu chaptersMenu = new ContextMenu();
+            for (long i = 0; i < chapters; i++)
+            {
+                var menuitem = new MenuItem();
+                menuitem.Header = $"Chapter {i}";
+                menuitem.Tag = i;
+                menuitem.Click += JumpToChapter_Click;
+                chaptersMenu.Items.Add(menuitem);
+            }
+            if (GetTemplateChild("PART_Chapters") is Button btnChapters)
+            {
+                btnChapters.ContextMenu = null;
+                btnChapters.ContextMenu = chaptersMenu;
             }
         }
 
@@ -154,10 +192,20 @@ namespace Mpv.Net.Wpf
                 if (GetTemplateChild("PART_Seek") is Slider seek &&
                     _player.IsMediaLoaded)
                 {
-                    
+
                     seek.Value = e.NewPosition.TotalSeconds;
                 }
             });
+        }
+
+        private void JumpToChapter_Click(object sender, RoutedEventArgs e)
+        {
+            if (_player != null 
+                && sender is MenuItem item 
+                && item.Tag is long chapter)
+            {
+                _player.API.SetPropertyLong("chapter", chapter);
+            }
         }
     }
 }
