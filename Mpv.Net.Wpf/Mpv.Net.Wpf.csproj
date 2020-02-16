@@ -6,8 +6,4 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Mpv.NET" Version="1.1.1" />
-  </ItemGroup>
-
 </Project>
