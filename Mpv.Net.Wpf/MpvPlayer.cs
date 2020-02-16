@@ -110,6 +110,50 @@ namespace Mpv.Net.Wpf
                 if (type == "audio") aid.Add(id);
                 else if (type == "sub") sid.Add(id);
             }
+            if (GetTemplateChild("PART_Audio") is Button audio)
+            {
+                CreateMenu(audio, aid, (sender, e) =>
+                {
+                    if (_player != null
+                    && sender is MenuItem item
+                    && item.Tag is long id)
+                    {
+                        _player.API.SetPropertyLong("aid", id);
+                    }
+                });
+            }
+            if (GetTemplateChild("PART_Subtitle") is Button subtitle)
+            {
+                if (sid.Count > 0) sid.Insert(0, 0);
+                CreateMenu(subtitle, sid, (sender, e) =>
+                {
+                    if (_player != null
+                    && sender is MenuItem item
+                    && item.Tag is long id)
+                    {
+                        _player.API.SetPropertyLong("sid", id);
+                    }
+                });
+            }
+        }
+
+        private void CreateMenu(Button target, List<long> ids, Action<object, RoutedEventArgs> clickAction)
+        {
+            if (ids.Count < 1) return;
+            ContextMenu menu = new ContextMenu();
+            foreach (var id in ids)
+            {
+                var menuitem = new MenuItem();
+                menuitem.Header = id.ToString();
+                menuitem.Tag = id;
+                menuitem.Click += (sender, e) => clickAction(sender, e);
+                menu.Items.Add(menuitem);
+            }
+            target.ContextMenu = menu;
+            target.Click += (sender, e) =>
+            {
+                target.ContextMenu.IsOpen = true;
+            };
         }
 
         private void GetChapters()
@@ -122,13 +166,25 @@ namespace Mpv.Net.Wpf
                 var menuitem = new MenuItem();
                 menuitem.Header = $"Chapter {i}";
                 menuitem.Tag = i;
-                menuitem.Click += JumpToChapter_Click;
+                menuitem.Click += (sender, args) =>
+                {
+                    if (_player != null
+                    && sender is MenuItem item
+                    && item.Tag is long chapter)
+                    {
+                        _player.API.SetPropertyLong("chapter", chapter);
+                    }
+                };
                 chaptersMenu.Items.Add(menuitem);
             }
             if (GetTemplateChild("PART_Chapters") is Button btnChapters)
             {
                 btnChapters.ContextMenu = null;
                 btnChapters.ContextMenu = chaptersMenu;
+                btnChapters.Click += (sender, e) =>
+                {
+                    btnChapters.ContextMenu.IsOpen = true;
+                };
             }
         }
 
@@ -196,16 +252,6 @@ namespace Mpv.Net.Wpf
                     seek.Value = e.NewPosition.TotalSeconds;
                 }
             });
-        }
-
-        private void JumpToChapter_Click(object sender, RoutedEventArgs e)
-        {
-            if (_player != null 
-                && sender is MenuItem item 
-                && item.Tag is long chapter)
-            {
-                _player.API.SetPropertyLong("chapter", chapter);
-            }
         }
     }
 }

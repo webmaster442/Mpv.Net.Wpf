@@ -62,7 +62,7 @@
                                         </Canvas>
                                     </Viewbox>
                                 </Button>
-                                <Button
+                                <ToggleButton
                                     x:Name="PART_Chapters"
                                     ToolTip="Chapters"
                                     Margin="1">
@@ -77,13 +77,13 @@
                                                 Fill="{TemplateBinding Foreground}" />
                                         </Canvas>
                                     </Viewbox>
-                                </Button>
+                                </ToggleButton>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <Button
+                                    <ToggleButton
                                         x:Name="PART_Audio"
                                         ToolTip="Audio"
                                         Grid.Row="0"
@@ -99,8 +99,8 @@
                                                     Fill="{TemplateBinding Foreground}" />
                                             </Canvas>
                                         </Viewbox>
-                                    </Button>
-                                    <Button
+                                    </ToggleButton>
+                                    <ToggleButton
                                         x:Name="PART_Subtitle"
                                         ToolTip="Subtitle"
                                         Grid.Row="1"
@@ -116,7 +116,7 @@
                                                     Fill="{TemplateBinding Foreground}" />
                                             </Canvas>
                                         </Viewbox>
-                                    </Button>
+                                    </ToggleButton>
                                 </Grid>
                             </StackPanel>
                             <Slider
