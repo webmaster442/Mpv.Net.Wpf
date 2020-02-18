@@ -16,6 +16,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <!-- Main menu for file selection -->
         <Menu>
             <MenuItem Header="File">
                 <MenuItem
@@ -23,9 +24,11 @@
                     Header="Load file..." />
             </MenuItem>
         </Menu>
+        <!-- Mpv controls. Display is the video output -->
         <mpv:MpvDisplay
             x:Name="Display"
             Grid.Row="1" />
+        <!-- Player controller. Main interaction -->
         <mpv:MpvPlayer
             x:Name="Player"
             Grid.Row="2"
